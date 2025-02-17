@@ -4,7 +4,7 @@
 //
 //
 
-/// Rate Service should fetch data from https://api.coindesk.com/v1/bpi/currentprice.json
+/// Rate Service should fetch data from https://api.coincap.io/v2/assets/bitcoin
 /// Fetching should be scheduled with dynamic update interval
 /// Rate should be cached for the offline mode
 /// The service should be covered by unit tests
