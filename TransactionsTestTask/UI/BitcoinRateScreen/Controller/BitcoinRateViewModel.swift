@@ -16,7 +16,7 @@ final class BitcoinRateViewModel {
     }
 
     enum FetchState {
-        case bitcoinDataFetched(BitcoinData)
+        case bitcoinDataFetched(BitcoinUIModel)
         case fetchingStateChanged(Bool)
     }
 
@@ -67,7 +67,8 @@ private extension BitcoinRateViewModel {
             isStreaming = true
             do {
                 for try await bitcoinData in stream {
-                    onEvent?(.bitcoinDataFetched(bitcoinData))
+                    let uiModel = BitcoinUIModel(from: bitcoinData)
+                    onEvent?(.bitcoinDataFetched(uiModel))
                 }
             } catch {
                 isStreaming = false

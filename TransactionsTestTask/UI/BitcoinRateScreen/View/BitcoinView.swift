@@ -59,50 +59,21 @@ final class BitcoinView: UIView {
         }
     }
 
-    func updateUI(with data: BitcoinData) {
-
-        guard let price = Double(data.priceUsd),
-              let change = Double(data.changePercent24Hr),
-              let marketCap = Double(data.marketCapUsd),
-              let volume = Double(data.volumeUsd24Hr),
-              let supply = Double(data.supply) else {
-            return
-        }
-        
-        priceLabel.text = String(format: "$%.2f", price)
-
-        let changeText = String(format: "%.2f%%", change)
-        changeLabel.text = "24h Change: \(changeText)"
-        changeLabel.textColor = change >= 0 ? .systemGreen : .systemRed
-        
-        rankLabel.text = "Rank: #\(data.rank)"
-        marketCapLabel.text = "Market Cap: \(formatLargeNumber(marketCap))"
-        volumeLabel.text = "24h Volume: \(formatLargeNumber(volume))"
-        supplyLabel.text = "Supply: \(formatLargeNumber(supply)) BTC"
-        
-        lastUpdatedLabel.text = "Last Updated: \(DateFormatter.shortTime.string(from: Date()))"
+    func updateUI(with uiModel: BitcoinUIModel) {
+        priceLabel.text = uiModel.price
+        changeLabel.text = uiModel.change
+        changeLabel.textColor = uiModel.changeColor
+        rankLabel.text = uiModel.rank
+        marketCapLabel.text = uiModel.marketCap
+        volumeLabel.text = uiModel.volume
+        supplyLabel.text = uiModel.supply
+        lastUpdatedLabel.text = uiModel.lastUpdated
     }
 }
 
 // MARK: - Private methods
 
 private extension BitcoinView {
-
-    func formatLargeNumber(_ number: Double) -> String {
-        let billion = 1_000_000_000.0
-        let million = 1_000_000.0
-        let thousand = 1_000.0
-
-        if number >= billion {
-            return String(format: "$%.2fB", number / billion)
-        } else if number >= million {
-            return String(format: "$%.2fM", number / million)
-        } else if number >= thousand {
-            return String(format: "$%.2fK", number / thousand)
-        } else {
-            return String(format: "$%.2f", number)
-        }
-    }
 
     func setupView() {
         backgroundColor = .systemBackground
@@ -258,12 +229,4 @@ private extension BitcoinView {
             $0.bottom == buttonStackView.topAnchor - horizontalMargin
         }
     }
-}
-
-private extension DateFormatter {
-    static let shortTime: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter
-    }()
 }
